@@ -10,10 +10,95 @@ var segments = require('../');
 
 
 describe('segments:', function () {
-  it('should segments file paths.', function () {
-    expect(segments('/a/b/c/d/e/f/g/')).to.equal('g');
-    expect(segments('/a/b/c/d/e/f/g/', {last: 2})).to.equal('f/g');
-    // expect(segments('/a/b/c/d/e/f/g/', {last: 4})).to.equal('d/e/f/g');
-    // expect(segments('/a/b/c/d/e/f/g/', {first: 4})).to.equal('d/e/f/g');
+  describe('first:', function () {
+    it('should return the first n, normalized path segments.', function () {
+      expect(segments('a/b/c', {first: 1})).to.equal('a');
+      expect(segments('./a/b/c', {first: 1})).to.equal('a');
+      expect(segments('./a/b/c/', {first: 1})).to.equal('a');
+      expect(segments('a/b/c.js', {first: 1})).to.equal('a');
+      expect(segments('./a/b/c.js', {first: 1})).to.equal('a');
+      expect(segments('/a/b/c.js', {first: 1})).to.equal('a');
+      expect(segments('/a/b/c/', {first: 1})).to.equal('a');
+      expect(segments('a\\b\\c', {first: 1})).to.equal('a');
+      expect(segments('a\\b\\c\\', {first: 1})).to.equal('a');
+      expect(segments('.\\a\\b\\c\\', {first: 1})).to.equal('a');
+      expect(segments('\\a\\b\\c\\', {first: 1})).to.equal('a');
+      expect(segments('.\\a\\b\\c\\', {first: 1})).to.equal('a');
+      expect(segments('.\\a\\b\\c.js', {first: 1})).to.equal('a');
+
+      expect(segments('a/b/c', {first: 2})).to.equal('a/b');
+      expect(segments('./a/b/c', {first: 2})).to.equal('a/b');
+      expect(segments('./a/b/c/', {first: 2})).to.equal('a/b');
+      expect(segments('a/b/c.js', {first: 2})).to.equal('a/b');
+      expect(segments('./a/b/c.js', {first: 2})).to.equal('a/b');
+      expect(segments('/a/b/c.js', {first: 2})).to.equal('a/b');
+      expect(segments('/a/b/c/', {first: 2})).to.equal('a/b');
+      expect(segments('a\\b\\c', {first: 2})).to.equal('a/b');
+      expect(segments('a\\b\\c\\', {first: 2})).to.equal('a/b');
+      expect(segments('.\\a\\b\\c\\', {first: 2})).to.equal('a/b');
+      expect(segments('\\a\\b\\c\\', {first: 2})).to.equal('a/b');
+      expect(segments('.\\a\\b\\c\\', {first: 2})).to.equal('a/b');
+      expect(segments('.\\a\\b\\c.js', {first: 2})).to.equal('a/b');
+
+      expect(segments('a/b/c', {first: 3})).to.equal('a/b/c');
+      expect(segments('./a/b/c', {first: 3})).to.equal('a/b/c');
+      expect(segments('./a/b/c/', {first: 3})).to.equal('a/b/c');
+      expect(segments('a/b/c.js', {first: 3})).to.equal('a/b/c.js');
+      expect(segments('./a/b/c.js', {first: 3})).to.equal('a/b/c.js');
+      expect(segments('/a/b/c.js', {first: 3})).to.equal('a/b/c.js');
+      expect(segments('/a/b/c/', {first: 3})).to.equal('a/b/c');
+      expect(segments('a\\b\\c', {first: 3})).to.equal('a/b/c');
+      expect(segments('a\\b\\c\\', {first: 3})).to.equal('a/b/c');
+      expect(segments('.\\a\\b\\c\\', {first: 3})).to.equal('a/b/c');
+      expect(segments('\\a\\b\\c\\', {first: 3})).to.equal('a/b/c');
+      expect(segments('.\\a\\b\\c\\', {first: 3})).to.equal('a/b/c');
+      expect(segments('.\\a\\b\\c.js', {first: 3})).to.equal('a/b/c.js');
+    });
+  });
+
+  describe('last:', function () {
+    it('should return the last n, normalized path segments.', function () {
+      expect(segments('a/b/c')).to.equal('c');
+      expect(segments('./a/b/c')).to.equal('c');
+      expect(segments('./a/b/c/')).to.equal('c');
+      expect(segments('a/b/c.js')).to.equal('c.js');
+      expect(segments('./a/b/c.js')).to.equal('c.js');
+      expect(segments('/a/b/c.js')).to.equal('c.js');
+      expect(segments('/a/b/c/')).to.equal('c');
+      expect(segments('a\\b\\c')).to.equal('c');
+      expect(segments('a\\b\\c\\')).to.equal('c');
+      expect(segments('.\\a\\b\\c\\')).to.equal('c');
+      expect(segments('\\a\\b\\c\\')).to.equal('c');
+      expect(segments('.\\a\\b\\c\\')).to.equal('c');
+      expect(segments('.\\a\\b\\c.js')).to.equal('c.js');
+
+      expect(segments('a/b/c', {last: 2})).to.equal('b/c');
+      expect(segments('./a/b/c', {last: 2})).to.equal('b/c');
+      expect(segments('./a/b/c/', {last: 2})).to.equal('b/c');
+      expect(segments('a/b/c.js', {last: 2})).to.equal('b/c.js');
+      expect(segments('./a/b/c.js', {last: 2})).to.equal('b/c.js');
+      expect(segments('/a/b/c.js', {last: 2})).to.equal('b/c.js');
+      expect(segments('/a/b/c/', {last: 2})).to.equal('b/c');
+      expect(segments('a\\b\\c', {last: 2})).to.equal('b/c');
+      expect(segments('a\\b\\c\\', {last: 2})).to.equal('b/c');
+      expect(segments('.\\a\\b\\c\\', {last: 2})).to.equal('b/c');
+      expect(segments('\\a\\b\\c\\', {last: 2})).to.equal('b/c');
+      expect(segments('.\\a\\b\\c\\', {last: 2})).to.equal('b/c');
+      expect(segments('.\\a\\b\\c.js', {last: 2})).to.equal('b/c.js');
+
+      expect(segments('a/b/c', {last: 3})).to.equal('a/b/c');
+      expect(segments('./a/b/c', {last: 3})).to.equal('a/b/c');
+      expect(segments('./a/b/c/', {last: 3})).to.equal('a/b/c');
+      expect(segments('a/b/c.js', {last: 3})).to.equal('a/b/c.js');
+      expect(segments('./a/b/c.js', {last: 3})).to.equal('a/b/c.js');
+      expect(segments('/a/b/c.js', {last: 3})).to.equal('a/b/c.js');
+      expect(segments('/a/b/c/', {last: 3})).to.equal('a/b/c');
+      expect(segments('a\\b\\c', {last: 3})).to.equal('a/b/c');
+      expect(segments('a\\b\\c\\', {last: 3})).to.equal('a/b/c');
+      expect(segments('.\\a\\b\\c\\', {last: 3})).to.equal('a/b/c');
+      expect(segments('\\a\\b\\c\\', {last: 3})).to.equal('a/b/c');
+      expect(segments('.\\a\\b\\c\\', {last: 3})).to.equal('a/b/c');
+      expect(segments('.\\a\\b\\c.js', {last: 3})).to.equal('a/b/c.js');
+    });
   });
 });

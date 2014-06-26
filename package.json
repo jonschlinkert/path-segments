@@ -1,7 +1,7 @@
 {
   "name": "path-segments",
-  "description": "Get specific segments of a file path. First, last, last two, first two, etc.",
-  "version": "0.1.0",
+  "description": "Get n specific segments of a file path, e.g. first 2, last 3, etc.",
+  "version": "0.1.1",
   "homepage": "https://github.com/jonschlinkert/path-segments",
   "author": {
     "name": "Jon Schlinkert",
@@ -42,6 +42,7 @@
     "mocha": "*"
   },
   "dependencies": {
-    "parse-filepath": "^0.2.2"
+    "lodash": "^2.4.1",
+    "parse-filepath": "^0.3.0"
   }
 }

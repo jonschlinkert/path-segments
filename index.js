@@ -9,39 +9,37 @@
 
 var path = require('path');
 var parsepath = require('parse-filepath');
+var _ = require('lodash');
 
 module.exports = function segments (filepath, options) {
   options = options || {};
   options.sep = options.sep || '/';
   options.cwd = options.cwd || process.cwd();
 
-
   if (filepath) {
     var first, last, result = filepath;
-    var parsed = parsepath(filepath);
+    var parsed = parsepath(path.normalize(filepath));
+    parsed.dirname = parsed.dirname.replace(/^[\\\/]|[\\\/]$/g, '');
+    var segments = parsed.dirname.split(/[\\\/]/).filter(Boolean);
 
-    console.log(parsed);
+    _.extend(parsed, {
+      segments: _.union(segments, [parsed.basename].filter(Boolean))
+    });
 
-
-    var dir = path.join(options.cwd, path.dirname(filepath));
-    var basename = path.basename(filepath, path.extname(filepath));
-    var segments = dir.split(/[\\\/]/);
     var len = segments.length;
 
-    if (options.last) {
-      options.last = (options.last - 1);
-      last = segments.slice(len - options.last);
-      result = last.concat([basename]).join(options.sep);
-    } else if (options.first) {
-      options.first = (options.first + 1);
-      first = segments.slice(options.first);
-      result = first.concat([basename]).join(options.sep);
+    if (options.first) {
+      options.last = options.last || 1;
+      first = _.first(parsed.segments, options.first);
+      result = first.join(options.sep);
     } else {
-      options.last = 1;
-      last = segments.slice(len - options.last);
-      result = last.concat([basename]).join(options.sep);
+      options.last = options.last || 1;
+      last = _.last(parsed.segments, options.last);
+      result = last.join(options.sep);
     }
-    return result.replace(/^[\\\/]/, '');
+
+    return result;
   }
+
   return;
 };
